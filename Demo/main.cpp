@@ -76,10 +76,10 @@ void xbee_rx_interrupt(void)
 
 void xbee_rx(void)
 {
-   char buf[256] = {0};
-   char outbuf[256] = {0};
-   memset(buf, 0, 256);
+   char buf[100] = {0};
+   char outbuf[100] = {0};
    while(xbee.readable()){
+      memset(buf, 0, 256);
       for (int i=0; ; i++) {
          char *recv = new char[1];
          xbee.read(recv, 1);
@@ -88,12 +88,9 @@ void xbee_rx(void)
          break;
          }
       }
-
       RPC::call(buf, outbuf);
-
       printf("%s\r\n", outbuf);
-      xbee.write(outbuf, sizeof(outbuf));
-      ThisThread::sleep_for(500ms);
+      ThisThread::sleep_for(1s);
    }
 
 }
@@ -124,8 +121,9 @@ void check_addr(char *xbee_reply, char *messenger){
 
 void getAcc(Arguments *in, Reply *out) {
    int16_t pDataXYZ[3] = {0};
-   char buffer[200];
+   char buffer[100];
    BSP_ACCELERO_AccGetXYZ(pDataXYZ);
    sprintf(buffer, "Accelerometer values: (%d, %d, %d)", pDataXYZ[0], pDataXYZ[1], pDataXYZ[2]);
+   printf("%s\r\n", buffer);
    out->putData(buffer);
 }
