@@ -124,6 +124,5 @@ void getAcc(Arguments *in, Reply *out) {
    char buffer[100];
    BSP_ACCELERO_AccGetXYZ(pDataXYZ);
    sprintf(buffer, "Accelerometer values: (%d, %d, %d)", pDataXYZ[0], pDataXYZ[1], pDataXYZ[2]);
-   printf("%s\r\n", buffer);
    out->putData(buffer);
 }
